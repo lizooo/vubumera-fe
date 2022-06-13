@@ -25,8 +25,9 @@ const Header = () => {
     }
 
     const getLabel = () => {
-        if (!isLoggedIn || location.pathname === '/register') return 'Signin'
+        if (location.pathname === '/register') return 'Signin'
         else if (location.pathname === '/login') return 'Signup'
+        else if (!isLoggedIn)  return 'SignUp'
         else if (isLoggedIn) return 'Logout'
     }
 
@@ -35,12 +36,13 @@ const Header = () => {
     const handleButtonClick = () => {
         if (isLoggedIn) {
             eraseCookie('passportId');
-            console.log('erasing....')
             navigate('/login');
 
-        } else if (!isLoggedIn || location.pathname === 'register') {
+        } else if (location.pathname === '/register') {
             navigate('/login');
-        } else if (location.pathname === 'login')  navigate('/register');
+        } else if (location.pathname === '/login') {
+        navigate('/register');
+        } else if (!isLoggedIn)  navigate('/register');
     }
 
     return (

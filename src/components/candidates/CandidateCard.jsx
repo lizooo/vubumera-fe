@@ -4,7 +4,9 @@ import classes from './Candidates.module.scss';
 import classNames from 'classnames';
 
 
-const CandidateCard = ({name, description, imgUrl, electionId, userId, candidateId, isDisabled}) => {
+const CandidateCard = ({name, description, imgUrl, electionId, userId, candidateId, isDisabled, isSelected, isFlexible}) => {
+
+    console.log(isFlexible, 'flex')
 
     const vote = () => {
         fetch(`http://127.0.0.1:8000/api/vote/${userId}`, { 
@@ -15,17 +17,36 @@ const CandidateCard = ({name, description, imgUrl, electionId, userId, candidate
                 "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify({election_id: electionId, candidate_id: candidateId }) 
-        })
+        });
+        window.location.reload();
+    }
+
+    const unVote = () => {
+        fetch(`http://127.0.0.1:8000/api/unvote/${userId}/election/${electionId}`, { 
+            method: 'DELETE', 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
+            },
+        });
+        window.location.reload();
+    }
+
+    const handleClick = () => {
+        if (isSelected && isFlexible) unVote();
+        else if (!isSelected) vote();
     }
 
     const getLabel = () => {
-        if (!isDisabled) return 'Retrieve vote'
+        if (isSelected && isFlexible) return 'Retrieve vote'
+        else if (isSelected && !isFlexible) return 'Voted'
         else return 'Vote'
     }
 
     return (
         <div className={classNames(classes.cardWraper, {
-            [classes.selectedCard] : !isDisabled
+            [classes.selectedCard] : isSelected
         })} >
             <div className={classes.imgWrapper}>
                 <img src={imgUrl}/>
@@ -39,7 +60,7 @@ const CandidateCard = ({name, description, imgUrl, electionId, userId, candidate
                     label={getLabel()}
                     variant='border'
                     className={classes.cardButton}
-                    onClick={vote}
+                    onClick={handleClick}
                     disabled={isDisabled}
                 />
             </div>

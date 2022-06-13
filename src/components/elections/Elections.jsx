@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PermissionDenied from '../permissionDenied/PermissionDenied';
 import ElectionCard from './ElectionCard';
 import classes from './Elections.module.scss';
 
@@ -68,7 +69,7 @@ const Elections = () => {
            </div>}
         </div>
     </div> : 
-    <div>Please register</div>}
+    <PermissionDenied/>}
     </>
     );
 }

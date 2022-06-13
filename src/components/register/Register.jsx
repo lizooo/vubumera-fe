@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import classes from "./Register.module.scss";
 import { Input, DatePicker, Picklist, Option, Button } from 'react-rainbow-components';
+import { useNavigate } from 'react-router-dom';
 
 
 const Register = () => {
+
+    const navigate = useNavigate();
 
     const inputStyles = {
         width: '300px',
@@ -38,8 +41,6 @@ const Register = () => {
             location: {city: locationState.label}
         }
 
-        console.log(JSON.stringify(dateState).replace(/['"]+/g, ''))
-
         fetch('http://127.0.0.1:8000/api/voter/register/', { 
             method: 'POST', 
             headers: {
@@ -49,6 +50,17 @@ const Register = () => {
             },
             body: JSON.stringify(data) 
         })
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text) })
+            }
+            navigate('/login');
+            return response.json();
+        })
+        .catch((error) => {
+            console.log(error);
+            return Promise.reject();
+        }) 
     }
 
 //TODO add toast once request is sent
@@ -141,7 +153,7 @@ const Register = () => {
                             labelAlignment="left"
                             placeholder="Select date"
                             minDate={new Date(1900, 1, 1)}
-                            maxDate={new Date(2022, 1, 1)}
+                            maxDate={new Date(2004, 1, 1)}
                             label="Date of birth"
                             onChange={value => setDateState( value )}
                             style={selectStyles}

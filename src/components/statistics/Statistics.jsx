@@ -18,8 +18,6 @@ const Statistics = () => {
     }
     const userId = getCookie('passportId');
 
-    console.log(statistics)
-
     useEffect(()=> {
         fetch(`http://127.0.0.1:8000/api/statistics/${userId}`, { 
         method: 'GET', 
