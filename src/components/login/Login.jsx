@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Login.module.scss';
 import { Input, Button } from 'react-rainbow-components';
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
@@ -12,6 +13,69 @@ const Login = () => {
         paddingLeft: 0,
         paddingTop: 0,
     };
+
+    const [emailState, setEmailState] = useState();
+    const [passwordState, setPasswordState] = useState();
+    const [error, setError] = useState();
+    const navigate = useNavigate();
+
+    function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {   
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
+    const handleLogin = () => {
+        const body = {
+            password: passwordState, 
+            email: emailState
+        }
+
+        fetch('http://127.0.0.1:8000/api/voter/login/', { 
+            method: 'POST', 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify(body) 
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then(text => { console.log(text[1]); setError(text); throw new Error(text) })
+            }
+    
+            return response.json();
+        })
+        .then((responseJson) => { 
+            console.log(responseJson);
+        setCookie('passportId', responseJson.id, 1);
+        navigate('/elections');
+        })
+        .catch((error) => {
+           
+            console.error(error); 
+            return Promise.reject();
+
+        })
+    }
 
     return (
         <div className={classes.wrapper} >
@@ -27,21 +91,26 @@ const Login = () => {
                             placeholder="Enter password"
                             className="rainbow-p-around_medium"
                             style={inputStyles}
+                            onChange={value => {setPasswordState(value.target.value); setError(undefined)}}
                         />
 
                         <Input
-                            label="Passport ID"
+                            label="Email"
                             labelAlignment="left"
-                            placeholder="Enter passport ID"
+                            placeholder="Enter email"
                             type="text"
                             className="rainbow-p-around_medium"
                             style={inputStyles}
+                            onChange={(value) =>{ setEmailState(value.target.value); setError(undefined)}}
                         />
                 </div>
+                {error && <div className={classes.error}>{error}</div>}
                 <Button
                 label="Continue"
                 variant='brand'
                 className={classes.button}
+                onClick={handleLogin}
+                disabled={!emailState || !passwordState}
                 />
                 <img className={classes.arrow} src="arrow.png" />
             </div>

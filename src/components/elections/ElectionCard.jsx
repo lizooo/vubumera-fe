@@ -3,7 +3,7 @@ import { Button } from 'react-rainbow-components';
 import classes from './Elections.module.scss';
 
 
-const ElectionCard = ({type, name}) => {
+const ElectionCard = ({type, name, id}) => {
 
     const getType = (type) => {
         switch (type) {
