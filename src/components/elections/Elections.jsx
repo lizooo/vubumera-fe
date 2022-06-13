@@ -57,12 +57,13 @@ const Elections = () => {
             <img className={classes.home} src="home.png" />
             {electionsData && (
               <div className={classes.grid}>
-                {electionsData.map(({ name, id }, index) => (
+                {electionsData.map((election, index) => (
                   <ElectionCard
-                    key={id}
-                    name={name}
-                    id={id}
+                    key={election.id}
+                    name={election.name}
+                    id={election.id}
                     type={electionTypes[`${index > 3 ? index % 4 : index}`]}
+                    isLocal={election?.location}
                   />
                 ))}
               </div>

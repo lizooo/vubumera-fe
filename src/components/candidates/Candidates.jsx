@@ -106,7 +106,7 @@ const Candidates = () => {
                   candidateId={id}
                   isSelected={myVote?.id === id}
                   isDisabled={
-                    !!myVote.id ? (myVote.id === id ? false : true) : false
+                    !!myVote.id ? (myVote?.id === id ? false : true) : false
                   }
                   isFlexible={isElectionFlexible}
                 />

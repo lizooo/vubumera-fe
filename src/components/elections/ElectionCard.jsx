@@ -3,7 +3,7 @@ import { Button } from 'react-rainbow-components';
 import classes from './Elections.module.scss';
 import { useNavigate } from 'react-router-dom';
 
-const ElectionCard = ({ type, name, id }) => {
+const ElectionCard = ({ type, name, id, isLocal }) => {
   const navigate = useNavigate();
 
   const handleButonClick = () => {
@@ -25,6 +25,7 @@ const ElectionCard = ({ type, name, id }) => {
 
   return (
     <div className={classes.cardWraper}>
+      {isLocal && <img className={classes.iconLocal} src="local.png" />}
       <div className={classes.cardName}>
         <img src={getType(type)} />
         <h6>{name}</h6>
