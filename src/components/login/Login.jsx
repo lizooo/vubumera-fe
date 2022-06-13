@@ -45,7 +45,6 @@ const Login = () => {
       .then((response) => {
         if (!response.ok) {
           return response.text().then((text) => {
-            console.log(text[1]);
             setError(
               text === '{"email":["Enter a valid email address."]}'
                 ? 'No account associated with this email'
