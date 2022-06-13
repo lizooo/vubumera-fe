@@ -12,7 +12,7 @@ function App() {
     <BrowserRouter>
             <Header/>
               <AppRoutes/>
-              {/* <Footer/> */}
+              <Footer/>
         </BrowserRouter>
         </Application>
   );

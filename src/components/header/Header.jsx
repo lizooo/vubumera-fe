@@ -4,7 +4,6 @@ import { Button } from 'react-rainbow-components';
 import { useNavigate, useLocation  } from "react-router-dom";
 
 
-
 const Header = () => {
 
     const navigate = useNavigate();
@@ -26,8 +25,8 @@ const Header = () => {
     }
 
     const getLabel = () => {
-        if (!isLoggedIn || location.pathname === 'register') return 'Signin'
-        else if (location.pathname === 'login') return 'Signup'
+        if (!isLoggedIn || location.pathname === '/register') return 'Signin'
+        else if (location.pathname === '/login') return 'Signup'
         else if (isLoggedIn) return 'Logout'
     }
 

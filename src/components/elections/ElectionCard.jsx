@@ -1,9 +1,16 @@
 import React from 'react';
 import { Button } from 'react-rainbow-components';
 import classes from './Elections.module.scss';
+import { useNavigate } from "react-router-dom";
 
 
 const ElectionCard = ({type, name, id}) => {
+
+    const navigate = useNavigate();
+
+    const handleButonClick = () => {
+        navigate('/election', {state:{id: id}})
+    }
 
     const getType = (type) => {
         switch (type) {
@@ -24,6 +31,7 @@ const ElectionCard = ({type, name, id}) => {
              label="Learn more"
              variant='border'
              className={classes.cardButton}
+             onClick={handleButonClick}
              />
         </div>
     );

@@ -18,6 +18,7 @@ const Elections = () => {
         return null;
     }
     const isLoggedIn = !!getCookie('passportId');
+    const userId = getCookie('passportId');
 
     const electionTypes = ['president', 'mayor', 'farm', 'rector'];
     const elections = [
@@ -30,25 +31,8 @@ const Elections = () => {
     { name: 'Collective Farm elections' }, 
     { name: 'Rector Elections' },];
 
-    const mockedData = {
-        election_id: 3,
-        candidate_id: 7
-      };
-
-    // useEffect(()=> {
-    //     fetch('http://127.0.0.1:8000/api/vote/6', { 
-    //     method: 'POST', 
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json',
-    //         "Access-Control-Allow-Origin": "*",
-    //     },
-    //     body: JSON.stringify(mockedData) 
-    // })
-    // }, [])
-
         useEffect(()=> {
-        fetch('http://127.0.0.1:8000/api/elections/6', { 
+        fetch(`http://127.0.0.1:8000/api/elections/user/${userId}`, { 
         method: 'GET', 
         headers: {
             'Accept': 'application/json',
@@ -76,12 +60,12 @@ const Elections = () => {
             <img className={classes.spark} src="spark.png" />
             <h1 className={classes.title}>Let's get to know your choice</h1>
             <img className={classes.home} src="home.png" />
-           <div className={classes.grid}>
+           { electionsData && <div className={classes.grid}>
                {
-                   electionsData.map(({name}, index) => 
-                   <ElectionCard name={name} type={electionTypes[`${index > 3 ? index % 4 : index}`]}/>)
+                   electionsData.map(({name, id}, index) => 
+                   <ElectionCard key={id} name={name} id={id} type={electionTypes[`${index > 3 ? index % 4 : index}`]}/>)
                }
-           </div>
+           </div>}
         </div>
     </div> : 
     <div>Please register</div>}

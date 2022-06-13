@@ -1,36 +1,76 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import CandidateCard from './CandidateCard';
 import classes from './Candidates.module.scss'
+import {useLocation} from 'react-router-dom';
 
 
 const Candidates = () => {
 
-    const candidates = [
-        {   name: 'Katrin Brown', 
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
-            url: 'https://i.pinimg.com/564x/1e/ad/de/1eadde963ebe53838cc5f84e3ccf587c.jpg'
-        },
-        {   name: 'Katrin Brown', 
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
-            url: 'https://i.pinimg.com/564x/21/73/24/2173242661a3877ce72a9a4247b59f2c.jpg'
-        },
-        {   name: 'Katrin Brown', 
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
-            url: 'https://i.pinimg.com/564x/f9/fa/67/f9fa673c52a95c64c836d46847b0cdf3.jpg'
-        },
-        {   name: 'Katrin Brown', 
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
-            url: 'https://i.pinimg.com/564x/1e/ad/de/1eadde963ebe53838cc5f84e3ccf587c.jpg'
-        },
-        {   name: 'Katrin Brown', 
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
-            url: 'https://i.pinimg.com/564x/21/73/24/2173242661a3877ce72a9a4247b59f2c.jpg'
-        },
-        {   name: 'Katrin Brown', 
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
-            url: 'https://i.pinimg.com/564x/f9/fa/67/f9fa673c52a95c64c836d46847b0cdf3.jpg'
-        },
-];
+    const location = useLocation();
+    const electionId = location.state.id;
+    const [election, setElection] = useState();
+    const [myVote, setMyVote] = useState();
+
+    const getMyVote = () => {
+        fetch(`http://127.0.0.1:8000/api/election/details/${userId}/${electionId}`, { 
+            method: 'GET', 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
+            }})
+            .then((response) => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) })
+                }
+                return response.json();
+            })
+            .then((responseJson) => { 
+                setMyVote(responseJson);
+                console.log(responseJson, 'vote')
+            })
+            .catch((error) => {
+                console.log(error);
+                return Promise.reject();
+            }) 
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    const userId = getCookie('passportId');
+
+    useEffect(()=> {
+        getMyVote();
+        fetch(`http://127.0.0.1:8000/api/elections/${electionId}`, { 
+        method: 'GET', 
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+        }})
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text) })
+            }
+            return response.json();
+        })
+        .then((responseJson) => { 
+            setElection(responseJson);
+            console.log(responseJson)
+        })
+        .catch((error) => {
+            console.log(error);
+            return Promise.reject();
+        }) 
+    }, [])
 
     return (
         <div className={classes.wrapper} >
@@ -39,13 +79,13 @@ const Candidates = () => {
             <h1 className={classes.title}>Choose your{' '}
             <span className={classes.outer}><span className={classes.inner}>fighter</span></span> leader</h1>
             <img className={classes.home} src="home.png" />
-           <div className={classes.grid}>
+           { election?.candidates && <div className={classes.grid}>
                {
-                   candidates.map(({name, description, url}) => 
-                   <CandidateCard key={`${name}-${url}`} name={name} description={description} imgUrl={url}/>
+                   election.candidates.map(({full_name, description, id, image_url}) => 
+                   <CandidateCard key={`${id}`} name={full_name} description={description} imgUrl={image_url} electionId={electionId} userId={userId} candidateId={id} isDisabled={myVote.id === id ? false : true}/>
                    )
                }
-           </div>
+           </div>}
         </div>
     </div>
     );
