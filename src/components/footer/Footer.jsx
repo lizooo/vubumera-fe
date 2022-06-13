@@ -1,28 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classes from './Footer.module.scss';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from 'react-rainbow-components';
+import AuthContext from '../../context/AuthProvider';
 
 const Footer = () => {
-  function getCookie(name) {
-    var nameEQ = name + '=';
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-  }
-  const userId = getCookie('passportId');
+  const { auth } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const isFooter =
-    location.pathname !== '/register' &&
-    location.pathname !== '/login' &&
-    userId;
+    location.pathname !== '/register' && location.pathname !== '/login' && auth;
 
   const getLabel = () => {
     if (location.pathname === '/elections' || location.pathname === '/election')

@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import classes from './Login.module.scss';
 import { Input, Button } from 'react-rainbow-components';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../context/AuthProvider';
 
 const Login = () => {
+  const { setAuth } = useContext(AuthContext);
+  const [emailState, setEmailState] = useState();
+  const [passwordState, setPasswordState] = useState();
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+
   const inputStyles = {
     width: '600px',
     paddingBottom: 32,
@@ -11,11 +18,6 @@ const Login = () => {
     paddingLeft: 0,
     paddingTop: 0,
   };
-
-  const [emailState, setEmailState] = useState();
-  const [passwordState, setPasswordState] = useState();
-  const [error, setError] = useState();
-  const navigate = useNavigate();
 
   function setCookie(name, value, days) {
     var expires = '';
@@ -58,6 +60,7 @@ const Login = () => {
       })
       .then((responseJson) => {
         console.log(responseJson);
+        setAuth(responseJson.id);
         setCookie('passportId', responseJson.id, 1);
         navigate('/elections');
       })
@@ -75,19 +78,6 @@ const Login = () => {
         <img className={classes.star} src="star.png" />
         <div className={classes.form}>
           <Input
-            label="Password"
-            labelAlignment="left"
-            type="password"
-            placeholder="Enter password"
-            className="rainbow-p-around_medium"
-            style={inputStyles}
-            onChange={(value) => {
-              setPasswordState(value.target.value);
-              setError(undefined);
-            }}
-          />
-
-          <Input
             label="Email"
             labelAlignment="left"
             placeholder="Enter email"
@@ -96,6 +86,18 @@ const Login = () => {
             style={inputStyles}
             onChange={(value) => {
               setEmailState(value.target.value);
+              setError(undefined);
+            }}
+          />
+          <Input
+            label="Password"
+            labelAlignment="left"
+            type="password"
+            placeholder="Enter password"
+            className="rainbow-p-around_medium"
+            style={inputStyles}
+            onChange={(value) => {
+              setPasswordState(value.target.value);
               setError(undefined);
             }}
           />

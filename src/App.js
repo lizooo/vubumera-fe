@@ -1,20 +1,22 @@
 import { BrowserRouter } from 'react-router-dom';
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
-import AppRoutes from "./config/Routes";
-import "./fonts/CaslonTwoBlackSSK-Regular.ttf"
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import AppRoutes from './config/Routes';
+import './fonts/CaslonTwoBlackSSK-Regular.ttf';
 import { Application } from 'react-rainbow-components';
+import { AuthProvider } from './context/AuthProvider';
 
 function App() {
-
   return (
     <Application>
-    <BrowserRouter>
-            <Header/>
-              <AppRoutes/>
-              <Footer/>
+      <AuthProvider>
+        <BrowserRouter>
+          <Header />
+          <AppRoutes />
+          <Footer />
         </BrowserRouter>
-        </Application>
+      </AuthProvider>
+    </Application>
   );
 }
 

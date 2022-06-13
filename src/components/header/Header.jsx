@@ -1,22 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classes from './Header.module.scss';
 import { Button } from 'react-rainbow-components';
 import { useNavigate, useLocation } from 'react-router-dom';
+import AuthContext from '../../context/AuthProvider';
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  function getCookie(name) {
-    var nameEQ = name + '=';
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-  }
+  const { setAuth, auth } = useContext(AuthContext);
 
   function eraseCookie(name) {
     document.cookie =
@@ -30,12 +21,13 @@ const Header = () => {
     else if (isLoggedIn) return 'Logout';
   };
 
-  const isLoggedIn = !!getCookie('passportId');
+  const isLoggedIn = !!auth;
 
   const handleButtonClick = () => {
     if (isLoggedIn) {
       eraseCookie('passportId');
       navigate('/login');
+      setAuth(undefined);
     } else if (location.pathname === '/register') {
       navigate('/login');
     } else if (location.pathname === '/login') {

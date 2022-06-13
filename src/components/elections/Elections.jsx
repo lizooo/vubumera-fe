@@ -1,51 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PermissionDenied from '../permissionDenied/PermissionDenied';
 import ElectionCard from './ElectionCard';
 import classes from './Elections.module.scss';
+import AuthContext from '../../context/AuthProvider';
 
 const Elections = () => {
   const [electionsData, setElectionsData] = useState();
+  const { auth } = useContext(AuthContext);
 
-  function getCookie(name) {
-    var nameEQ = name + '=';
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-  }
-  const isLoggedIn = !!getCookie('passportId');
-  const userId = getCookie('passportId');
+  const isLoggedIn = !!auth;
 
   const electionTypes = ['president', 'mayor', 'farm', 'rector'];
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/elections/user/${userId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.text().then((text) => {
-            throw new Error(text);
+    {
+      if (auth)
+        fetch(`http://127.0.0.1:8000/api/elections/user/${auth}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((text) => {
+                throw new Error(text);
+              });
+            }
+            return response.json();
+          })
+          .then((responseJson) => {
+            setElectionsData(responseJson);
+          })
+          .catch((error) => {
+            console.log(error);
+            return Promise.reject();
           });
-        }
-        return response.json();
-      })
-      .then((responseJson) => {
-        setElectionsData(responseJson);
-      })
-      .catch((error) => {
-        console.log(error);
-        return Promise.reject();
-      });
-  }, []);
+    }
+  }, [auth]);
 
   return (
     <>

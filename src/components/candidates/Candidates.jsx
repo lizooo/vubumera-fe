@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CandidateCard from './CandidateCard';
 import classes from './Candidates.module.scss';
 import { useLocation } from 'react-router-dom';
+import AuthContext from '../../context/AuthProvider';
 
 const Candidates = () => {
   const location = useLocation();
@@ -9,6 +10,7 @@ const Candidates = () => {
   const [election, setElection] = useState();
   const [myVote, setMyVote] = useState();
   const isElectionFlexible = election?.is_flexible;
+  const { auth } = useContext(AuthContext);
 
   const getMyVote = () => {
     fetch(
@@ -102,11 +104,11 @@ const Candidates = () => {
                   description={description}
                   imgUrl={image_url}
                   electionId={electionId}
-                  userId={userId}
+                  userId={auth}
                   candidateId={id}
                   isSelected={myVote?.id === id}
                   isDisabled={
-                    !!myVote.id ? (myVote?.id === id ? false : true) : false
+                    !!myVote?.id ? (myVote?.id === id ? false : true) : false
                   }
                   isFlexible={isElectionFlexible}
                 />
