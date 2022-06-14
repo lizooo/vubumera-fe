@@ -1,0 +1,70 @@
+.wrapper {
+    padding-top: 50px;
+    max-width: 80%;
+    margin: 0 auto;
+
+    .bubbles {
+        position: absolute;
+        left: 640px;
+        top: 100px;
+        width: 41.07px;
+        height: 28.63px;
+    }
+
+    .star {
+        position: absolute;
+        top: 140px;
+        right: 640px;
+        width: 30.13px;
+        height: 34.72px;
+    }
+
+    .arrow {
+        position: absolute;
+        left: 560px;
+        bottom: 60px; 
+        width: 381.71px;
+        height: 100.53px;
+    }
+}
+
+.form {
+    padding-top: 74px;
+    display: flex;
+    flex-direction: column;
+    
+    label {
+        color: #576574 !important;
+    }
+
+    input {
+        border: 1px solid #A4A7B5;
+    }
+}
+
+.title {
+    font-family: 'CaslonTwoBlackSSK';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 120%;
+    text-align: center;
+    color: #1B1B1B;
+}
+
+.button {
+    width: 570px;
+    height: 60px;
+    background-color: #121212;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 130%;
+    color: #fff;
+    border: 1px solid #121212;
+    margin: 100px auto 0;
+    border-radius: 20px;
+}
+
+.header {
+    text-align: center;
+}

@@ -1,0 +1,86 @@
+.wrapper {
+    padding-top: 50px;
+    max-width: 80%;
+    margin: 0 auto;
+
+    .spark {
+        position: absolute;
+        width: 31.03px;
+        height: 30.65px;
+        left: 343.99px;
+        top: 155.36px;
+    }
+
+    .home {
+        position: absolute;
+        width: 87.17px;
+        height: 81.78px;
+        left: 1441px;
+        top: 160px;
+    }
+}
+
+
+.title {
+    font-family: 'CaslonTwoBlackSSK';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 120%;
+    text-align: center;
+    color: #1B1B1B;
+}
+
+.header {
+    text-align: center;
+}
+
+.grid {
+    margin: 120px auto 120px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 1230px;
+    gap: 30px;
+}
+
+.cardWraper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px;
+    width: 600px;
+    height: 120px;
+    background: rgba(89, 99, 134, 0.06);
+    border-radius: 12px;
+}
+
+.chartName {
+    display: flex;
+    gap: 26px;
+    align-items: center;
+    color: #1B1B1B;
+    margin-bottom: 24px;
+
+    h6 {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 18px;
+    }
+}
+
+.cardButton {
+    border: 2px solid #1B1B1B;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 0 24px;
+}
+
+.chartWrapper {
+    width: 660px;
+    height: 380px;
+    background: #FFFFFF;
+    box-shadow: 0px 24px 80px rgba(69, 77, 104, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+}
